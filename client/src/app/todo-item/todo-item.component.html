@@ -1,6 +1,11 @@
 <article class="todo-item" [class.completed]="todo.isCompleted">
   <label class="toggle">
-    <input type="checkbox" [checked]="todo.isCompleted" (change)="onToggle()" />
+    <input
+      type="checkbox"
+      [checked]="todo.isCompleted"
+      (change)="onToggle()"
+      [attr.aria-label]="todo.isCompleted ? 'Mark todo as active' : 'Mark todo as completed'"
+    />
     <span></span>
   </label>
 

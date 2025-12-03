@@ -19,7 +19,7 @@ The Angular client that will run at `http://localhost:4200` (and the fallback `h
 Run end-to-end CRUD verification from the repo root:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\Test-TodoCrud.ps1
+powershell -ExecutionPolicy Bypass -File .\server\scripts\Test-TodoCrud.ps1
 ```
 
 The script builds the project, starts `dotnet run --no-build`, performs POST → GET → PUT → GET → DELETE → GET(404), prints the results, and shuts the server down.

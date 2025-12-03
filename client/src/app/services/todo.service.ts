@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Todo } from '../models/todo';
+import { environment } from '../../environments/environment';
 
-const BASE_URL = 'http://localhost:5080/api/todos';
+const BASE_URL = environment.apiBaseUrl;
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {

@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -101,7 +103,7 @@ button {
 }
 
 .primary {
-  background: linear-gradient(120deg, var(--ff-primary, #0c6ddf), lighten(#0c6ddf, 12%));
+  background: linear-gradient(120deg, var(--ff-primary, #0c6ddf), color.adjust(#0c6ddf, $lightness: 12%));
   color: #fff;
 }
 

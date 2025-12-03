@@ -1,76 +1,90 @@
-# isure Home Assignment – Full-Stack Todo App
+# FlaischerFlow - isure Home Assignment
 
-## Overview
+FlaischerFlow is a polished full-stack Todo experience crafted specifically for the isure take-home. It pairs a .NET 8 Web API backed by Azure Cosmos DB with an Angular 17 standalone frontend that leans on modern signals, Angular Material, and custom SCSS branding.
 
-This repository contains a full-stack Todo application that showcases an Angular frontend backed by a .NET 8 Web API and Azure Cosmos DB for persistence.
+## Feature Checklist
+- Create, edit, delete, and toggle todo items via Cosmos-backed REST endpoints.
+- Mission control filters (All / In Progress / Done) with live counters and pagination.
+- Modal-driven create/update workflow plus guarded delete confirmations.
+- Responsive, FlaischerFlow-branded UI with hero, toolbar, list, paginator, and footer.
+- Bonus automation scripts for CRUD smoke tests and seeding isure-themed tasks.
 
-- **Frontend:** Angular 17 standalone app (SCSS, signals, standalone components)
-- **Backend:** .NET 8 Web API with Cosmos SDK
-- **Database:** Azure Cosmos DB for NoSQL (todosdb / todos container)
-- **API surface:** REST endpoints under `http://localhost:5080/api/todos`
+## Tech Stack
+| Layer    | Details |
+|----------|---------|
+| Backend  | .NET 8 Web API, ASP.NET Core controllers, Azure Cosmos DB SDK |
+| Database | Azure Cosmos DB for NoSQL (database `todosdb`, container `todos`, partition key `/id`) |
+| Frontend | Angular 17 standalone components, signals, Angular Material, SCSS |
+| Tooling  | PowerShell automation scripts, npm scripts, dotnet CLI |
 
-## Project Structure
-
-- `server/` – ASP.NET Core Web API, Cosmos integration, CRUD endpoints
-- `client/` – Angular 17 SPA that consumes the API and manages Todos
-
-## Prerequisites
-
-- Node.js 18+ (LTS) and npm
-- .NET 8 SDK
-- An Azure Cosmos DB account (NoSQL API) or the Azure Cosmos DB emulator
+## Repository Layout
+```
+root
+ README.md          # You are here
+ server/            # ASP.NET Core Web API (Cosmos integration)
+    scripts/       # PowerShell automation (CRUD test, seed data)
+ client/            # Angular 17 SPA (FlaischerFlow UI)
+```
 
 ## Backend Setup (`/server`)
-
-1. Navigate to the server project:
+1. **Prerequisites:** .NET 8 SDK and access to an Azure Cosmos DB account (or the local emulator).
+2. **Configure Cosmos credentials (never commit secrets):**
    ```bash
    cd server
+   dotnet user-secrets init
+   dotnet user-secrets set "Cosmos:Endpoint" "https://<your-account>.documents.azure.com:443/"
+   dotnet user-secrets set "Cosmos:Key" "<primary-key>"
    ```
-2. Configure Cosmos settings. `appsettings.json` contains a placeholder section:
-   ```json
-   "Cosmos": {
-     "Endpoint": "COSMOS_ENDPOINT_PLACEHOLDER",
-     "Key": "COSMOS_KEY_PLACEHOLDER"
-   }
-   ```
-   Supply real values via [user secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets), environment variables, or a local override file that is gitignored.
-3. Restore and run:
+   Alternatively export `Cosmos__Endpoint` / `Cosmos__Key` environment variables.
+3. **Run the API:**
    ```bash
    dotnet restore
    dotnet run --urls http://localhost:5080
    ```
-   The API now listens on `http://localhost:5080` and exposes CRUD endpoints at `/api/todos`.
-4. Optional – run the automated CRUD smoke test:
+   The service exposes `GET/POST/PUT/DELETE` under `http://localhost:5080/api/todos` and sets `createdAt` automatically when new todos are stored.
+4. **Verify with the CRUD smoke test (optional but recommended):**
    ```powershell
-   powershell -ExecutionPolicy Bypass -File .\scripts\Test-TodoCrud.ps1
+   # from the repo root
+   powershell -ExecutionPolicy Bypass -File .\server\scripts\Test-TodoCrud.ps1
    ```
-   The script builds the project, runs `dotnet run --no-build`, executes POST→GET→PUT→GET→DELETE→GET(404), and shuts the server down.
+   The script builds the project, launches `dotnet run --no-build`, exercises POST -> GET -> PUT -> GET -> DELETE -> GET(404), prints results, and shuts the host down.
 
 ## Frontend Setup (`/client`)
-
-1. Navigate to the Angular project:
+1. **Prerequisites:** Node.js 18+ (with npm) and the Angular CLI (`npm install -g @angular/cli`).
+2. **Install & serve:**
    ```bash
    cd client
-   ```
-2. Install dependencies (first run only):
-   ```bash
    npm install
+   npm run start   # equivalent to ng serve --port 4200
    ```
-3. Start the dev server:
+3. **Configure API base URL:** The UI talks to `http://localhost:5080/api/todos` by default (see `src/app/services/todo.service.ts`). Adjust this constant or add an environment-specific proxy if your backend runs elsewhere.
+4. **Build for production:**
    ```bash
-   ng serve --port 4200
+   npm run build
    ```
-4. Browse to `http://localhost:4200`. The client expects the backend at `http://localhost:5080/api/todos`. Adjust the base URL in `src/app/services/todo.service.ts` if your backend differs.
+   The output lands in `client/dist/` and can be hosted behind any static web server or Azure Static Web App.
 
-## Running Both Apps Together
+## Bonus PowerShell Scripts (`server/scripts`)
+| Script | Purpose | How to run |
+|--------|---------|------------|
+| `Test-TodoCrud.ps1` | Builds + runs the API locally and executes a full CRUD smoke test. | `powershell -ExecutionPolicy Bypass -File .\server\scripts\Test-TodoCrud.ps1 [-StartServer:$false]` |
+| `Seed-IsureTodos.ps1` | Populates Cosmos with 31 humorous, mission-themed todos spanning the entire isure journey. | `powershell -ExecutionPolicy Bypass -File .\server\scripts\Seed-IsureTodos.ps1 [-StartServer:$true]` |
 
-- Backend: `cd server && dotnet run --urls http://localhost:5080`
-- Frontend: `cd client && ng serve --port 4200`
+Both scripts accept `-BaseUrl` if you need to point at a different environment.
 
-Stop each process with `Ctrl+C` when finished.
+## Deployment Notes
+- **Backend:** Deploy the ASP.NET API to Azure App Service or Azure Container Apps. Set `Cosmos__Endpoint` and `Cosmos__Key` as application settings along with the expected database/container names.
+- **Frontend:** Build the Angular app and host it via Azure Static Web Apps or Azure Storage static hosting. Configure `TodoService` base URL (or use environment files) so that it calls the deployed API.
+- **CORS:** Update `Program.cs` to include your deployed frontend origin(s) before publishing.
 
-## Notes
+## Verification & Quality Checklist
+- `cd server && dotnet build`  succeeds with nullable warnings treated by the SDK defaults.
+- `cd client && npm run build`  produces an optimized Angular bundle.
+- Filters, pagination, modals, and CRUD flows were manually tested in the FlaischerFlow UI.
+- No Cosmos secrets are committed; configuration flows through appsettings + overrides.
+- Bonus scripts documented and aligned with current API endpoints/payloads.
 
-- No secrets are committed to source control. Use configuration providers for Cosmos credentials.
-- The Angular UI is responsive, uses standalone components (TodoPage → TodoList → TodoItem, plus TodoFormModal and ConfirmDialog), and consumes the backend via `TodoService`.
-- Todos now include a `createdAt` timestamp that is stored in Cosmos DB and displayed in the UI.
+## Future Enhancements
+- Persist pagination/filter preferences per user via query params.
+- Add e2e tests (e.g., Playwright) that exercise the Angular UI against the live API.
+- Containerize both apps with Docker and add a simple `docker-compose` for local orchestration.

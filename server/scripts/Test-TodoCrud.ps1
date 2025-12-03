@@ -2,7 +2,7 @@ param(
     [string]$BaseUrl = "http://localhost:5080/api/todos",
     [bool]$StartServer = $true,
     [int]$StartupTimeoutSeconds = 30,
-    [string]$ProjectPath = (Get-Location).Path
+    [string]$ProjectPath = (Join-Path $PSScriptRoot '..')
 )
 
 $ErrorActionPreference = "Stop"

@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $ff-bg: #f2f5fb;
 $ff-primary: #0c6ddf;
 $ff-primary-dark: #084c9c;
@@ -154,7 +156,7 @@ $ff-muted: #64748b;
   font-weight: 600;
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(120deg, $ff-primary, lighten($ff-primary, 12%));
+  background: linear-gradient(120deg, $ff-primary, color.adjust($ff-primary, $lightness: 12%));
   box-shadow: 0 18px 30px rgba(12, 109, 223, 0.25);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.95rem;
@@ -164,7 +166,7 @@ $ff-muted: #64748b;
 .primary:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 25px 45px rgba(12, 109, 223, 0.4);
-  background: linear-gradient(120deg, darken($ff-primary, 5%), $ff-primary);
+  background: linear-gradient(120deg, color.adjust($ff-primary, $lightness: -5%), $ff-primary);
 }
 
 .primary:active {

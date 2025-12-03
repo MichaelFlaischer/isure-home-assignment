@@ -11,14 +11,14 @@ Runs a Todo API smoke test end-to-end:
 5. Shut the Web API down and print its console output.
 
 ```powershell
-# from the project root, no manual steps needed
-powershell -ExecutionPolicy Bypass -File .\scripts\Test-TodoCrud.ps1
+# from the repo root
+powershell -ExecutionPolicy Bypass -File .\server\scripts\Test-TodoCrud.ps1
 
 # if you already have the API running, skip the auto-host
-powershell -File .\scripts\Test-TodoCrud.ps1 -StartServer:$false
+powershell -File .\server\scripts\Test-TodoCrud.ps1 -StartServer:$false
 
 # point at a different base URL (e.g., HTTPS)
-powershell -File .\scripts\Test-TodoCrud.ps1 -BaseUrl "https://localhost:7125/api/todos"
+powershell -File .\server\scripts\Test-TodoCrud.ps1 -BaseUrl "https://localhost:7125/api/todos"
 ```
 
 ## Seed-IsureTodos.ps1
@@ -36,13 +36,13 @@ Perfect for demo purposes and showcasing the full FlaischerFlow experience.
 
 ```powershell
 # Seed with API already running (recommended)
-powershell -ExecutionPolicy Bypass -File .\scripts\Seed-IsureTodos.ps1
+powershell -ExecutionPolicy Bypass -File .\server\scripts\Seed-IsureTodos.ps1
 
 # Auto-start the server and seed
-powershell -File .\scripts\Seed-IsureTodos.ps1 -StartServer:$true
+powershell -File .\server\scripts\Seed-IsureTodos.ps1 -StartServer:$true
 
 # Point at a different API endpoint
-powershell -File .\scripts\Seed-IsureTodos.ps1 -BaseUrl "https://localhost:7125/api/todos"
+powershell -File .\server\scripts\Seed-IsureTodos.ps1 -BaseUrl "https://localhost:7125/api/todos"
 ```
 
 **Output**: Color-coded console messages showing each todo being created, with a final summary of success/failure counts.
