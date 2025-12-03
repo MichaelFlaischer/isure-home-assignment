@@ -1,0 +1,75 @@
+﻿<main class="todo-shell">
+  <header class="todo-header">
+    <h1>Todo List</h1>
+    <p>Manage tasks stored in the Cosmos-backed API.</p>
+  </header>
+
+  <section class="card form-card">
+    <h2>Add / Edit Todo</h2>
+    <label class="field">
+      <span>Title *</span>
+      <input
+        type="text"
+        name="title"
+        [(ngModel)]="newTitle"
+        placeholder="Enter todo title"
+        required
+      />
+    </label>
+
+    <label class="field">
+      <span>Description</span>
+      <textarea
+        name="description"
+        rows="3"
+        [(ngModel)]="newDescription"
+        placeholder="Optional description"
+      ></textarea>
+    </label>
+
+    <div class="actions">
+      <button type="button" class="primary" (click)="editingTodo ? saveEdit() : addTodo()" [disabled]="!newTitle.trim()">
+        {{ editingTodo ? 'Save' : 'Add' }}
+      </button>
+      <button type="button" class="secondary" *ngIf="editingTodo" (click)="cancelEdit()">
+        Cancel
+      </button>
+    </div>
+  </section>
+
+  <section class="card list-card">
+    <h2>Existing Todos</h2>
+
+    <p class="status" *ngIf="loading">Loading...</p>
+    <p class="status error" *ngIf="!loading && error">{{ error }}</p>
+    <p class="status" *ngIf="!loading && !error && todos.length === 0">No todos yet.</p>
+
+    <div class="todos" *ngIf="!loading && !error && todos.length > 0">
+      <article
+        class="todo-item"
+        *ngFor="let todo of todos"
+        [class.completed]="todo.isCompleted"
+      >
+        <div class="todo-main">
+          <label class="toggle">
+            <input
+              type="checkbox"
+              [checked]="todo.isCompleted"
+              (change)="toggleCompleted(todo)"
+            />
+            <span></span>
+          </label>
+          <div class="details">
+            <h3>{{ todo.title }}</h3>
+            <p *ngIf="todo.description">{{ todo.description }}</p>
+          </div>
+        </div>
+
+        <div class="todo-actions">
+          <button type="button" class="link" (click)="startEdit(todo)">Edit</button>
+          <button type="button" class="link danger" (click)="deleteTodo(todo)">Delete</button>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
