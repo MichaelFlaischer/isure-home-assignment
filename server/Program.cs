@@ -11,7 +11,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(CorsPolicyName, policy =>
         policy.WithOrigins(
                 "http://localhost:4200",
-                "https://flaischerflow-web.azurestaticapps.net"
+            "https://flaischerflow-web.azurestaticapps.net",
+            "https://flaischerflowclient.z39.web.core.windows.net"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()));
