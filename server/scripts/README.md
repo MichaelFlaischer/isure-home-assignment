@@ -1,5 +1,7 @@
 # Scripts
 
+Automation utilities that live under `server/scripts`.
+
 ## Test-TodoCrud.ps1
 
 Runs a Todo API smoke test end-to-end:
@@ -14,25 +16,23 @@ Runs a Todo API smoke test end-to-end:
 # from the repo root
 powershell -ExecutionPolicy Bypass -File .\server\scripts\Test-TodoCrud.ps1
 
-# if you already have the API running, skip the auto-host
+# reuse an already running API
 powershell -File .\server\scripts\Test-TodoCrud.ps1 -StartServer:$false
 
-# point at a different base URL (e.g., HTTPS)
-powershell -File .\server\scripts\Test-TodoCrud.ps1 -BaseUrl "https://localhost:7125/api/todos"
+# test against production (careful: mutates real data)
+powershell -File .\server\scripts\Test-TodoCrud.ps1 -BaseUrl "https://flaischerflow-api-dufufag9eabkgffn.israelcentral-01.azurewebsites.net/api/todos" -StartServer:$false
 ```
 
 ## Seed-IsureTodos.ps1
 
-Seeds the FlaischerFlow database with 31 humorous, isure-themed todos chronicling Michael's entire journey from receiving the home assignment to getting hired:
+Seeds the FlaischerFlow database with 31 humorous, isure-themed todos chronicling the assignment journey:
 
-- **Phase 1**: Reading & planning the assignment
+- **Phase 1**: Reading & planning the brief
 - **Phase 2**: Backend & Azure Cosmos setup
-- **Phase 3**: Angular client & basic UI
-- **Phase 4**: FlaischerFlow UX refactor & branding
-- **Phase 5**: README, QA, submission
-- **Phase 6**: Interview process, offer, contract, first day
-
-Perfect for demo purposes and showcasing the full FlaischerFlow experience.
+- **Phase 3**: Angular client foundation
+- **Phase 4**: FlaischerFlow UX polish & branding
+- **Phase 5**: Documentation, QA, submission
+- **Phase 6**: Interview process and onboarding
 
 ```powershell
 # Seed with API already running (recommended)
@@ -41,10 +41,10 @@ powershell -ExecutionPolicy Bypass -File .\server\scripts\Seed-IsureTodos.ps1
 # Auto-start the server and seed
 powershell -File .\server\scripts\Seed-IsureTodos.ps1 -StartServer:$true
 
-# Point at a different API endpoint
-powershell -File .\server\scripts\Seed-IsureTodos.ps1 -BaseUrl "https://localhost:7125/api/todos"
+# Point at production (only when demo data is acceptable)
+powershell -File .\server\scripts\Seed-IsureTodos.ps1 -BaseUrl "https://flaischerflow-api-dufufag9eabkgffn.israelcentral-01.azurewebsites.net/api/todos" -StartServer:$false
 ```
 
-**Output**: Color-coded console messages showing each todo being created, with a final summary of success/failure counts.
+**Output**: Color-coded console messages for every created todo plus a summary of success/failure counts.
 
-**Note**: Run this script to populate a fresh database or add the isure journey workflow to an existing database.
+**Reminder**: Both scripts mutate data; aim them at production only when those changes are desired.
