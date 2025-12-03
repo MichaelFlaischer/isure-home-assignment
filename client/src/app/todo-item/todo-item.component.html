@@ -7,6 +7,9 @@
   <div class="details">
     <h3>{{ todo.title }}</h3>
     <p *ngIf="todo.description">{{ todo.description }}</p>
+    <div class="todo-meta" *ngIf="todo.createdAt">
+      Created at: <span>{{ todo.createdAt | date: 'short' }}</span>
+    </div>
   </div>
 
   <div class="actions">

@@ -67,6 +67,11 @@ public class TodoCosmosService
             item.id = Guid.NewGuid().ToString();
         }
 
+        if (item.createdAt == default)
+        {
+            item.createdAt = DateTime.UtcNow;
+        }
+
         var response = await _container.CreateItemAsync(item, new PartitionKey(item.id)).ConfigureAwait(false);
         return response.Resource;
     }
@@ -74,6 +79,19 @@ public class TodoCosmosService
     public async Task<TodoItem?> UpdateAsync(string id, TodoItem updated)
     {
         updated.id = id;
+
+        if (updated.createdAt == default)
+        {
+            try
+            {
+                var existing = await _container.ReadItemAsync<TodoItem>(id, new PartitionKey(id)).ConfigureAwait(false);
+                updated.createdAt = existing.Resource.createdAt;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
 
         try
         {

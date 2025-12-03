@@ -1,19 +1,26 @@
-<main class="todo-shell">
-  <header class="todo-header">
+<main class="todo-page">
+  <header class="hero">
     <h1>Todo List</h1>
     <p>Manage tasks stored in the Cosmos-backed API.</p>
   </header>
 
-  <section class="card toolbar">
-    <div class="filters">
+  <section class="todo-card toolbar">
+    <div class="todo-header">
+      <div>
+        <p class="eyebrow">Stay on top of work</p>
+        <h2>Filter your tasks</h2>
+      </div>
+      <button type="button" class="primary" (click)="onAddTodo()">Add Todo</button>
+    </div>
+
+    <div class="filter-group">
       <button type="button" [class.active]="filterMode() === 'all'" (click)="onFilterChange('all')">All</button>
       <button type="button" [class.active]="filterMode() === 'active'" (click)="onFilterChange('active')">Active</button>
       <button type="button" [class.active]="filterMode() === 'completed'" (click)="onFilterChange('completed')">Completed</button>
     </div>
-    <button type="button" class="primary" (click)="onAddTodo()">Add Todo</button>
   </section>
 
-  <section class="card list-card">
+  <section class="todo-card list-card">
     <header class="list-header">
       <h2>Todos</h2>
       <span class="count">{{ filteredTodos().length }} items</span>
