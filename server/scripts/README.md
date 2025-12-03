@@ -20,3 +20,31 @@ powershell -File .\scripts\Test-TodoCrud.ps1 -StartServer:$false
 # point at a different base URL (e.g., HTTPS)
 powershell -File .\scripts\Test-TodoCrud.ps1 -BaseUrl "https://localhost:7125/api/todos"
 ```
+
+## Seed-IsureTodos.ps1
+
+Seeds the FlaischerFlow database with 31 humorous, isure-themed todos chronicling Michael's entire journey from receiving the home assignment to getting hired:
+
+- **Phase 1**: Reading & planning the assignment
+- **Phase 2**: Backend & Azure Cosmos setup
+- **Phase 3**: Angular client & basic UI
+- **Phase 4**: FlaischerFlow UX refactor & branding
+- **Phase 5**: README, QA, submission
+- **Phase 6**: Interview process, offer, contract, first day
+
+Perfect for demo purposes and showcasing the full FlaischerFlow experience.
+
+```powershell
+# Seed with API already running (recommended)
+powershell -ExecutionPolicy Bypass -File .\scripts\Seed-IsureTodos.ps1
+
+# Auto-start the server and seed
+powershell -File .\scripts\Seed-IsureTodos.ps1 -StartServer:$true
+
+# Point at a different API endpoint
+powershell -File .\scripts\Seed-IsureTodos.ps1 -BaseUrl "https://localhost:7125/api/todos"
+```
+
+**Output**: Color-coded console messages showing each todo being created, with a final summary of success/failure counts.
+
+**Note**: Run this script to populate a fresh database or add the isure journey workflow to an existing database.
