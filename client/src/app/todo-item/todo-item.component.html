@@ -13,7 +13,13 @@
   </div>
 
   <div class="actions">
-    <button type="button" class="link" (click)="onEdit()">Edit</button>
-    <button type="button" class="link danger" (click)="onDelete()">Delete</button>
+    <button mat-raised-button type="button" class="btn-edit" (click)="onEdit()" aria-label="Edit todo">
+      <span class="icon">✏️</span>
+      <span>Edit</span>
+    </button>
+    <button mat-raised-button type="button" class="btn-delete" (click)="onDelete()" aria-label="Delete todo">
+      <span class="icon">🗑️</span>
+      <span>Delete</span>
+    </button>
   </div>
 </article>

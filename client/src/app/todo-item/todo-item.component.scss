@@ -59,23 +59,59 @@
   gap: 0.5rem;
 }
 
-.link {
-  background: none;
+.btn-edit,
+.btn-delete {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   border: none;
-  color: var(--ff-primary, #0c6ddf);
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
   font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 }
 
-.link:hover {
-  background: rgba(12, 109, 223, 0.08);
+.btn-edit {
+  background: #1E88E5;
+  color: #fff;
+
+  &:hover {
+    background: #1565C0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
-.link.danger {
-  color: #dc2626;
+.btn-delete {
+  background: #E53935;
+  color: #fff;
+
+  &:hover {
+    background: #C62828;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .toggle {

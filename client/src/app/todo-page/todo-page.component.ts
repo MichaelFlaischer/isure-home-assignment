@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Todo } from '../models/todo';
 import { TodoService } from '../services/todo.service';
 import { TodoListComponent } from '../todo-list/todo-list.component';
@@ -11,7 +14,7 @@ export type FilterMode = 'all' | 'active' | 'completed';
 @Component({
   selector: 'app-todo-page',
   standalone: true,
-  imports: [CommonModule, TodoListComponent, TodoFormModalComponent, ConfirmDialogComponent],
+  imports: [CommonModule, MatButtonModule, MatButtonToggleModule, MatPaginatorModule, TodoListComponent, TodoFormModalComponent, ConfirmDialogComponent],
   templateUrl: './todo-page.component.html',
   styleUrls: ['./todo-page.component.scss']
 })
@@ -40,6 +43,23 @@ export class TodoPageComponent implements OnInit {
     return todos;
   });
 
+  readonly totalCount = computed(() => this.todos().length);
+  readonly activeCount = computed(() => this.todos().filter(t => !t.isCompleted).length);
+  readonly doneCount = computed(() => this.todos().filter(t => t.isCompleted).length);
+
+  readonly pageIndex = signal(0);
+  readonly pageSize = signal(10);
+  readonly pageSizeOptions = [5, 10, 25, 50];
+
+  readonly paginatedTodos = computed(() => {
+    const filtered = this.filteredTodos();
+    const start = this.pageIndex() * this.pageSize();
+    const end = start + this.pageSize();
+    return filtered.slice(start, end);
+  });
+
+  readonly totalFiltered = computed(() => this.filteredTodos().length);
+
   ngOnInit(): void {
     this.loadTodos();
   }
@@ -62,6 +82,12 @@ export class TodoPageComponent implements OnInit {
 
   onFilterChange(mode: FilterMode): void {
     this.filterMode.set(mode);
+    this.pageIndex.set(0); // Reset to first page when filter changes
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
   }
 
   onAddTodo(): void {

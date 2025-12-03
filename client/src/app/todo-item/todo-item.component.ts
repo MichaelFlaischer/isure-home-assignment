@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { Todo } from '../models/todo';
 
 @Component({
   selector: 'app-todo-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './todo-item.component.html',
   styleUrls: ['./todo-item.component.scss']
 })

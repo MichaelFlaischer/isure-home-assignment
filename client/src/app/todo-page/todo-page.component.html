@@ -12,23 +12,29 @@
   <section class="todo-card toolbar">
     <div class="todo-header">
       <div>
-        <p class="eyebrow">Stay on track</p>
-        <h2>Filter mission steps</h2>
+        <p class="eyebrow">🎯 Mission Control Center</p>
+        <h2>Filter & organize your tasks</h2>
       </div>
-      <button type="button" class="primary" (click)="onAddTodo()">Add Task to the Mission</button>
+      <button mat-raised-button type="button" class="primary" (click)="onAddTodo()">+ Add New Task</button>
     </div>
 
-    <div class="filter-group">
-      <button type="button" [class.active]="filterMode() === 'all'" (click)="onFilterChange('all')">All Tasks</button>
-      <button type="button" [class.active]="filterMode() === 'active'" (click)="onFilterChange('active')">In Progress</button>
-      <button type="button" [class.active]="filterMode() === 'completed'" (click)="onFilterChange('completed')">Done ✓</button>
-    </div>
+    <mat-button-toggle-group [value]="filterMode()" (change)="onFilterChange($event.value)" class="filter-group">
+      <mat-button-toggle value="all">
+        All Tasks <span class="count">({{ totalCount() }})</span>
+      </mat-button-toggle>
+      <mat-button-toggle value="active">
+        In Progress <span class="count">({{ activeCount() }})</span>
+      </mat-button-toggle>
+      <mat-button-toggle value="completed">
+        Done ✓ <span class="count">({{ doneCount() }})</span>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </section>
 
   <section class="todo-card list-card">
     <header class="list-header">
       <h2>Mission Steps</h2>
-      <span class="count">{{ filteredTodos().length }} steps</span>
+      <span class="count">{{ totalFiltered() }} steps</span>
     </header>
 
     <p class="status" *ngIf="loading()">Loading your mission steps...</p>
@@ -36,11 +42,22 @@
 
     <app-todo-list
       *ngIf="!loading() && !error()"
-      [todos]="filteredTodos()"
+      [todos]="paginatedTodos()"
       (edit)="onEditTodo($event)"
       (delete)="onDeleteTodo($event)"
       (toggle)="onToggle($event)"
     ></app-todo-list>
+
+    <mat-paginator
+      *ngIf="!loading() && !error() && totalFiltered() > 0"
+      [length]="totalFiltered()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      class="todo-paginator">
+    </mat-paginator>
   </section>
 
   <app-todo-form-modal
