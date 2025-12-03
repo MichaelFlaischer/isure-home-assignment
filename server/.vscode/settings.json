@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net8.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/edbfb359-3c0b-4ba9-9a6a-ec997c1c5f80/resourceGroups/todo-app-rg/providers/Microsoft.Web/sites/flaischerflow-api"
+}

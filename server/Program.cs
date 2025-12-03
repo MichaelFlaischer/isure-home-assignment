@@ -2,16 +2,19 @@ using server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string CorsPolicyName = "AllowAngularClient";
+const string CorsPolicyName = "AllowFlaischerFlowOrigins";
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<TodoCosmosService>();
 
 builder.Services.AddCors(options =>
     options.AddPolicy(CorsPolicyName, policy =>
-        policy.WithOrigins("http://localhost:4200", "http://localhost:4201")
-              .AllowAnyHeader()
-              .AllowAnyMethod()));
+        policy.WithOrigins(
+                "http://localhost:4200",
+                "https://flaischerflow-web.azurestaticapps.net"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

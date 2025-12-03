@@ -72,10 +72,47 @@ root
 
 Both scripts accept `-BaseUrl` if you need to point at a different environment.
 
-## Deployment Notes
-- **Backend:** Deploy the ASP.NET API to Azure App Service or Azure Container Apps. Set `Cosmos__Endpoint` and `Cosmos__Key` as application settings along with the expected database/container names.
-- **Frontend:** Build the Angular app and host it via Azure Static Web Apps or Azure Storage static hosting. Configure `TodoService` base URL (or use environment files) so that it calls the deployed API.
-- **CORS:** Update `Program.cs` to include your deployed frontend origin(s) before publishing.
+## Deployment
+
+### Backend – Azure App Service (`server/`)
+1. **Publish locally:**
+   ```bash
+   cd server
+   dotnet restore
+   dotnet publish -c Release -o ./publish
+   ```
+   The `publish/` folder contains everything needed for App Service.
+2. **Deploy:**
+   - *VS Code Azure App Service extension*: Right-click `publish/` ➜ **Deploy to Web App** ➜ choose the `flaischerflow-api` Linux App Service ➜ confirm zip deploy.
+   - *Deployment Center (GitHub Actions)*: In the Azure Portal, open the App Service ➜ **Deployment Center** ➜ connect GitHub ➜ select this repo and branch ➜ the portal generates a workflow that builds via `dotnet publish` and deploys on every push.
+3. **App Service settings (Configuration ➜ Application settings):**
+   - `ASPNETCORE_ENVIRONMENT=Production`
+   - `Cosmos__Endpoint=https://<your-cosmos-account>.documents.azure.com:443/`
+   - `Cosmos__Key=<primary-key>`
+   - `Cosmos__DatabaseId=todosdb`
+   - `Cosmos__ContainerId=todos`
+   - (Optional) `ASPNETCORE_URLS=http://+:8080` if you want to pin the Kestrel port.
+4. **CORS:** `Program.cs` registers the `AllowFlaischerFlowOrigins` policy to permit `http://localhost:4200` and `https://flaischerflow-web.azurestaticapps.net`. If you host the SPA elsewhere, add the new origin to this policy.
+5. **Result:** The API is reachable at `https://flaischerflow-api.azurewebsites.net/api/todos` and continues to expose the same CRUD surface, including automatic `createdAt` stamping.
+
+### Frontend – Azure Static Web Apps (`client/`)
+1. **Resource:** Create an Azure Static Web App that points to this GitHub repo. Use `client` for **App location**, leave **API location** blank, and set **Output location** to `dist/client`.
+2. **Workflow:** The repo includes `.github/workflows/flaischerflow-static-web-app.yml`, which:
+   - Triggers on pushes to `main`.
+   - Uses Node.js 18, runs `npm ci`, then `npm run build` inside `/client`.
+   - Uploads `dist/client` via `Azure/static-web-apps-deploy@v1` using the `STATIC_WEB_APPS_API_TOKEN` secret.
+3. **API URL configuration:** `src/environments/environment.ts` targets `http://localhost:5080/api`, while `environment.prod.ts` targets `https://flaischerflow-api.azurewebsites.net/api`. `TodoService` appends `/todos` at runtime, so updating the API host only requires editing the relevant environment file.
+4. **CORS reminder:** Ensure the backend continues to allow the Static Web App hostname exactly as printed in the Azure portal (e.g., `https://flaischerflow-web.azurestaticapps.net`).
+
+### Post-Deployment Verification
+1. Browse to `https://flaischerflow-web.azurestaticapps.net`.
+2. Confirm the todo list loads from Cosmos via the cloud API.
+3. Create, edit, complete, and delete todos to verify persistence.
+4. (Optional) Run the CRUD script against production:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\server\scripts\Test-TodoCrud.ps1 -BaseUrl "https://flaischerflow-api.azurewebsites.net/api/todos" -StartServer:$false
+   ```
+   > ⚠️ This seeds and deletes live data; only run it if the production database is safe to modify.
 
 ## Verification & Quality Checklist
 - `cd server && dotnet build`  succeeds with nullable warnings treated by the SDK defaults.

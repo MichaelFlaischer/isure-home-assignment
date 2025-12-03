@@ -4,7 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Todo } from '../models/todo';
 import { environment } from '../../environments/environment';
 
-const BASE_URL = environment.apiBaseUrl;
+const TODOS_ENDPOINT = `${environment.apiBaseUrl}/todos`;
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
@@ -12,31 +12,31 @@ export class TodoService {
 
   getTodos(): Observable<Todo[]> {
     return this.http
-      .get<Todo[]>(BASE_URL)
+      .get<Todo[]>(TODOS_ENDPOINT)
       .pipe(catchError(() => this.handleError('Failed to load todos')));
   }
 
   getTodo(id: string): Observable<Todo> {
     return this.http
-      .get<Todo>(`${BASE_URL}/${id}`)
+      .get<Todo>(`${TODOS_ENDPOINT}/${id}`)
       .pipe(catchError(() => this.handleError('Failed to load todo')));
   }
 
   createTodo(payload: Omit<Todo, 'id'>): Observable<Todo> {
     return this.http
-      .post<Todo>(BASE_URL, payload)
+      .post<Todo>(TODOS_ENDPOINT, payload)
       .pipe(catchError(() => this.handleError('Failed to create todo')));
   }
 
   updateTodo(id: string, payload: Omit<Todo, 'id'>): Observable<Todo> {
     return this.http
-      .put<Todo>(`${BASE_URL}/${id}`, payload)
+      .put<Todo>(`${TODOS_ENDPOINT}/${id}`, payload)
       .pipe(catchError(() => this.handleError('Failed to update todo')));
   }
 
   deleteTodo(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${BASE_URL}/${id}`)
+      .delete<void>(`${TODOS_ENDPOINT}/${id}`)
       .pipe(catchError(() => this.handleError('Failed to delete todo')));
   }
 
