@@ -4,7 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Todo } from '../models/todo';
 import { environment } from '../../environments/environment';
 
-const TODOS_ENDPOINT = `${environment.apiBaseUrl}/todos`;
+const TODOS_ENDPOINT = environment.apiBaseUrl;
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
