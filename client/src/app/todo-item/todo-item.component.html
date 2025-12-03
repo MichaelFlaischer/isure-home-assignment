@@ -1,0 +1,16 @@
+<article class="todo-item" [class.completed]="todo.isCompleted">
+  <label class="toggle">
+    <input type="checkbox" [checked]="todo.isCompleted" (change)="onToggle()" />
+    <span></span>
+  </label>
+
+  <div class="details">
+    <h3>{{ todo.title }}</h3>
+    <p *ngIf="todo.description">{{ todo.description }}</p>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="link" (click)="onEdit()">Edit</button>
+    <button type="button" class="link danger" (click)="onDelete()">Delete</button>
+  </div>
+</article>

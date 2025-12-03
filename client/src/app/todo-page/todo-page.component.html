@@ -1,0 +1,48 @@
+<main class="todo-shell">
+  <header class="todo-header">
+    <h1>Todo List</h1>
+    <p>Manage tasks stored in the Cosmos-backed API.</p>
+  </header>
+
+  <section class="card toolbar">
+    <div class="filters">
+      <button type="button" [class.active]="filterMode() === 'all'" (click)="onFilterChange('all')">All</button>
+      <button type="button" [class.active]="filterMode() === 'active'" (click)="onFilterChange('active')">Active</button>
+      <button type="button" [class.active]="filterMode() === 'completed'" (click)="onFilterChange('completed')">Completed</button>
+    </div>
+    <button type="button" class="primary" (click)="onAddTodo()">Add Todo</button>
+  </section>
+
+  <section class="card list-card">
+    <header class="list-header">
+      <h2>Todos</h2>
+      <span class="count">{{ filteredTodos().length }} items</span>
+    </header>
+
+    <p class="status" *ngIf="loading()">Loading...</p>
+    <p class="status error" *ngIf="!loading() && error()">{{ error() }}</p>
+
+    <app-todo-list
+      *ngIf="!loading() && !error()"
+      [todos]="filteredTodos()"
+      (edit)="onEditTodo($event)"
+      (delete)="onDeleteTodo($event)"
+      (toggle)="onToggle($event)"
+    ></app-todo-list>
+  </section>
+
+  <app-todo-form-modal
+    [visible]="showEditModal()"
+    [todo]="selectedTodo()"
+    (save)="onSaveTodo($event)"
+    (close)="onCloseEditModal()"
+  ></app-todo-form-modal>
+
+  <app-confirm-dialog
+    [visible]="showDeleteModal()"
+    title="Delete todo"
+    message="Are you sure you want to delete this todo?"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  ></app-confirm-dialog>
+</main>

@@ -1,0 +1,36 @@
+<div class="modal-backdrop" *ngIf="visible">
+  <div class="modal">
+    <header class="modal-header">
+      <div>
+        <p class="eyebrow">{{ todo ? 'Update todo' : 'Create todo' }}</p>
+        <h2>{{ todo ? 'Edit Todo' : 'New Todo' }}</h2>
+      </div>
+      <button type="button" class="icon" (click)="onClose()" aria-label="Close dialog">&times;</button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label class="field">
+        <span>Title *</span>
+        <input type="text" formControlName="title" placeholder="Enter todo title" />
+        <small class="error" *ngIf="form.controls.title.invalid && form.controls.title.touched">
+          Title is required.
+        </small>
+      </label>
+
+      <label class="field">
+        <span>Description</span>
+        <textarea rows="3" formControlName="description" placeholder="Optional description"></textarea>
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" formControlName="isCompleted" />
+        <span>Mark as completed</span>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary" (click)="onClose()">Cancel</button>
+        <button type="submit" class="primary">{{ todo ? 'Save changes' : 'Add todo' }}</button>
+      </div>
+    </form>
+  </div>
+</div>

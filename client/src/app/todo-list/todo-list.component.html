@@ -1,0 +1,15 @@
+<ng-container *ngIf="todos.length; else emptyState">
+  <div class="todo-list">
+    <app-todo-item
+      *ngFor="let todo of todos"
+      [todo]="todo"
+      (edit)="edit.emit($event)"
+      (delete)="delete.emit($event)"
+      (toggle)="toggle.emit($event)"
+    ></app-todo-item>
+  </div>
+</ng-container>
+
+<ng-template #emptyState>
+  <p class="empty-state">No todos match the selected filter.</p>
+</ng-template>
