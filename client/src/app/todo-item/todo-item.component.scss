@@ -1,18 +1,29 @@
+:host {
+  display: block;
+}
+
 .todo-item {
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 1rem 1.25rem;
+  border: 1px solid var(--ff-border, rgba(12, 109, 223, 0.12));
+  border-radius: 18px;
+  padding: 1.1rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: #fff;
+  background: var(--ff-card-bg, #fff);
+  box-shadow: 0 12px 25px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 
   &.completed {
-    opacity: 0.75;
+    opacity: 0.8;
 
     h3 {
       text-decoration: line-through;
     }
+  }
+
+  &:hover {
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.09);
+    transform: translateY(-1px);
   }
 }
 
@@ -23,21 +34,23 @@
 .details h3 {
   margin: 0;
   font-size: 1.05rem;
+  color: var(--ff-text, #1f2933);
 }
 
 .details p {
   margin: 0.25rem 0 0;
-  color: #64748b;
+  color: var(--ff-muted, #64748b);
   font-size: 0.95rem;
 }
 
 .todo-meta {
   margin-top: 0.35rem;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: rgba(15, 23, 42, 0.5);
 
   span {
     font-weight: 600;
+    color: var(--ff-primary, #0c6ddf);
   }
 }
 
@@ -49,11 +62,16 @@
 .link {
   background: none;
   border: none;
-  color: #2563eb;
+  color: var(--ff-primary, #0c6ddf);
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.link:hover {
+  background: rgba(12, 109, 223, 0.08);
 }
 
 .link.danger {
@@ -62,8 +80,8 @@
 
 .toggle {
   position: relative;
-  width: 42px;
-  height: 24px;
+  width: 46px;
+  height: 26px;
   flex-shrink: 0;
 }
 
@@ -77,7 +95,7 @@
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background-color: #cbd5f5;
+  background-color: rgba(15, 23, 42, 0.15);
   transition: 0.2s;
   border-radius: 999px;
 }
@@ -85,8 +103,8 @@
 .toggle span:before {
   position: absolute;
   content: '';
-  height: 18px;
-  width: 18px;
+  height: 20px;
+  width: 20px;
   left: 3px;
   bottom: 3px;
   background-color: #fff;
@@ -96,11 +114,11 @@
 }
 
 .toggle input:checked + span {
-  background-color: #34d399;
+  background-color: var(--ff-primary, #0c6ddf);
 }
 
 .toggle input:checked + span:before {
-  transform: translateX(18px);
+  transform: translateX(20px);
 }
 
 @media (max-width: 600px) {

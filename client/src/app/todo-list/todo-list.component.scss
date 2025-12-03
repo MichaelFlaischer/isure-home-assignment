@@ -1,3 +1,8 @@
+:host {
+  display: block;
+  color: var(--ff-text, #1f2933);
+}
+
 .todo-list {
   display: flex;
   flex-direction: column;
@@ -5,9 +10,10 @@
 }
 
 .empty-state {
-  padding: 0.75rem 1rem;
-  background: #f1f5f9;
-  border-radius: 12px;
-  color: #475569;
+  padding: 0.85rem 1.25rem;
+  background: rgba(12, 109, 223, 0.08);
+  border-radius: 14px;
+  color: var(--ff-muted, #64748b);
   text-align: center;
+  border: 1px dashed var(--ff-border, rgba(12, 109, 223, 0.2));
 }

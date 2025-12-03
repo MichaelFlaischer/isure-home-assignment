@@ -97,7 +97,7 @@ button {
 }
 
 .primary {
-  background: linear-gradient(120deg, #2563eb, #7c3aed);
+  background: linear-gradient(120deg, var(--ff-primary, #0c6ddf), lighten(#0c6ddf, 12%));
   color: #fff;
 }
 
